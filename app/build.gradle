@@ -68,13 +68,15 @@ dependencies {
     }
     androidTestCompile 'com.android.support.test:runner:1.0.1'
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 }
 
-task print_git_tag_command << {
-    def gradleProps = getGradleProperties()
-    println "git tag -a v" + gradleProps['VERSION_NAME'] + " -m \"VERSION_CODE=" + gradleProps['VERSION_CODE'] + ", VERSION_NAME=" + gradleProps['VERSION_NAME'] + "\""
-    println "git push --tags"
+task print_git_tag_command  {
+    doLast {
+        def gradleProps = getGradleProperties()
+        println "git tag -a v" + gradleProps['VERSION_NAME'] + " -m \"VERSION_CODE=" + gradleProps['VERSION_CODE'] + ", VERSION_NAME=" + gradleProps['VERSION_NAME'] + "\""
+        println "git push --tags"
+    }
 }
 

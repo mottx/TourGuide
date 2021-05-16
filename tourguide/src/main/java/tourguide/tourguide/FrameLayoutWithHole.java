@@ -10,9 +10,11 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,9 +132,7 @@ public class FrameLayoutWithHole extends FrameLayout {
         mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextAlign(Paint.Align.LEFT);
 
-        Point size = new Point();
-        size.x = mActivity.getResources().getDisplayMetrics().widthPixels;
-        size.y = mActivity.getResources().getDisplayMetrics().heightPixels;
+        Point size = getDefaultResolution(mActivity);
 
         mEraserBitmap = Bitmap.createBitmap(size.x, size.y, Bitmap.Config.ARGB_8888);
         mEraserCanvas = new Canvas(mEraserBitmap);
@@ -344,5 +344,17 @@ public class FrameLayoutWithHole extends FrameLayout {
      */
     public int getScreenHeight(Activity activity) {
         return activity.getResources().getDisplayMetrics().heightPixels;
+    }
+    
+    public Point getDefaultResolution(Activity activity) {
+      Display display = activity.getWindowManager().getDefaultDisplay();
+      Point size = new Point();
+
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        display.getRealSize(size);
+      else
+        display.getSize(size);
+
+      return size;
     }
 }
